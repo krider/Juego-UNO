@@ -77,5 +77,3 @@ Ser el primer jugador en descartar todas tus cartas antes que la computadora.
 - Programación Orientada a Objetos
 - Colecciones de Java (ArrayList)
 - Scanner para entrada de usuario
-
-## 📂 Estructura del Proyecto
