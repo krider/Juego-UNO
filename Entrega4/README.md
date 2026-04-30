@@ -1,6 +1,6 @@
 # 🎮 UNO Refactorizado – Documentación de Mejoras y Pruebas
 
-**Versión:** 2.0  
+**Versión:** 4.0  
 **Fecha de entrega:** 29 de abril de 2026  
 
 ---
