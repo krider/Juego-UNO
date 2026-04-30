@@ -21,12 +21,11 @@ Se reorganizó el proyecto en **11 clases** con responsabilidades claramente def
 | `Deck` | Mazo de 108 cartas. Permite robar, barajar y reciclar. |
 | `DiscardPile` | Pila de descarte. Mantiene la carta en mesa y permite reconstruir el mazo. |
 | `Card` | Modelo de una carta UNO (color, tipo, número) con validación de jugadas. |
-| `ColorConsola` | Utilidad de códigos ANSI para colores en consola, con colores fijos por jugador. |
 
 ### Separación de capas
 
 - **Lógica de negocio:** `Game`, `Player`, `Hand`, `TurnManager`, `RuleEngine`, `Deck`, `DiscardPile`.
-- **Lógica de presentación:** `GameUI`, `ColorConsola`.
+- **Lógica de presentación:** `GameUI`.
 - **Reglas del juego:** `Card.esJugableSobre()`, `RuleEngine.aplicarEfecto()`.
 
 **Principio aplicado:** Inversión de dependencias. `Game` no conoce `Scanner` ni `System.out`; se comunica con el mundo exterior a través de `GameUI`. Esto permitiría migrar a una interfaz gráfica sin modificar la lógica.
