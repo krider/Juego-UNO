@@ -1,0 +1,77 @@
+UNO Refactorizado – Documentación de Mejoras y Pruebas
+Versión: 2.0
+Fecha de entrega: 29 de abril de 2026
+
+1. Refactorización aplicada
+Se reorganizó el proyecto en 11 clases con responsabilidades claramente definidas, eliminando la "clase Dios" que concentraba toda la lógica.
+
+Clase	Responsabilidad
+Main	Punto de entrada. Crea la UI y el juego.
+Game	Orquestador de alto nivel. Coordina el flujo del juego sin depender de la consola.
+GameUI	Maneja toda la entrada/salida (Scanner, mensajes, colores, pausas).
+Player	Representa un jugador (humano o IA). Contiene la lógica de decisión automática.
+Hand	Gestiona las cartas de un jugador, búsqueda de jugadas válidas y priorización de especiales.
+TurnManager	Controla el orden de turnos, dirección, saltos, y omite jugadores sin cartas.
+RuleEngine	Aplica los efectos de las cartas especiales (Reversa, Salto, +2, Comodín, +4).
+Deck	Mazo de 108 cartas. Permite robar, barajar y reciclar.
+DiscardPile	Pila de descarte. Mantiene la carta en mesa y permite reconstruir el mazo.
+Card	Modelo de una carta UNO (color, tipo, número) con validación de jugadas.
+ColorConsola	Utilidad de códigos ANSI para colores en consola, con colores fijos por jugador.
+Separación de capas
+Lógica de negocio: Game, Player, Hand, TurnManager, RuleEngine, Deck, DiscardPile.
+
+Lógica de presentación: GameUI, ColorConsola.
+
+Reglas del juego: Card.esJugableSobre(), RuleEngine.aplicarEfecto().
+
+Principio aplicado: Inversión de dependencias. Game no conoce Scanner ni System.out; se comunica con el mundo exterior a través de GameUI. Esto permitiría migrar a una interfaz gráfica sin modificar la lógica.
+
+2. Plan de pruebas unitarias
+2.1 Estrategia
+Técnica	Descripción	Clases evaluadas
+Caja negra	Partición equivalente, valores límite, tabla de decisión.	Card, TurnManager
+Caja blanca	Cobertura de sentencia, decisión y condición.	RuleEngine, Hand
+Integración	Flujo completo simulado.	Game con Scanner virtual
+2.2 Casos de prueba ejecutados
+CardTest
+Construcción de carta numérica / especial / comodín.
+
+Excepciones por color inválido, número fuera de rango, comodín con color.
+
+esJugableSobre(): mismo color, mismo número, mismo tipo especial, comodín siempre válido, distinto color y número, mesa null.
+
+toString() con y sin color, comodines, cartas especiales.
+
+setColor() y resetColor() en comodines; excepción en carta normal.
+
+RuleEngineTest (con stubs)
+Efecto SALTO: siguiente jugador pierde turno.
+
+Efecto REVERSA: cambia dirección; con 2 jugadores también salta.
+
+Efecto ROBA2: siguiente roba 2 cartas y pierde turno.
+
+Efecto COMODÍN: elige color, no roba cartas.
+
+Efecto ROBA4: elige color, siguiente roba 4 cartas y pierde turno.
+
+TurnManagerTest
+Jugador inicial.
+
+Avance normal en horario y antihorario.
+
+Salto de turno por efecto de carta.
+
+Omisión de jugador con mano vacía.
+
+Cambio de dirección simple y doble.
+
+siguienteJugador() en ambas direcciones y ciclos.
+
+GameIntegrationTest
+Simulación de partida completa con entrada predefinida (victoria del jugador humano).
+
+2.3 Herramientas utilizadas
+JUnit 5 (Jupiter) con @Test, @BeforeEach, @DisplayName, assertAll.
+
+Stubs manuales para aislar dependencias en RuleEngineTest.
